@@ -1,0 +1,6 @@
+{
+    "workbench.sideBar.location": "left",
+    "zenMode.hideActivityBar": true,
+    "diffEditor.renderSideBySide": false,
+    "files.simpleDialog.enable": false
+}
