@@ -5,7 +5,7 @@ import Room from "../model/Room";
 export const getAllRoom = async (req,res)=>{
     try {
         const rooms = await Room.find({});
-        res.status(200).json({msg:"All Hotels",result:rooms});
+        res.status(200).json({msg:"All Room",result:rooms});
     } catch (error) {
         res.status(500).json({msg:"something is wrong"});
         
@@ -34,36 +34,28 @@ export const createRoom = async (req,res)=>{
 export const getRoomsByHottle = async (req,res)=>{
     const {id} = req.params;  
     try {
-        const hotelbyroom = await Hotel.findById(id).populate("rooms");
-        const rooms = hotelbyroom.rooms;
-        const roomlist = [];
-       rooms.forEach(room => {
-           Room.findById(room).then(room => {
-                roomlist.push(room);
-                console.log(room);             
-            }).catch(err => {
-                console.log(err);
-            })
-            
-        })
-        res.status(200).json({msg:"Rooms by hotel",result:[room]});                
+        const hotelbyroom = await Hotel.findById(id);      
+        const listrooms = await Promise.all(hotelbyroom.rooms.map(async (room)=>{
+            const roombyid = await Room.findById(room);
+            return roombyid;
+        }));
+        res.status(200).json({msg:"Rooms by hotel",result:listrooms,total:listrooms.length});
     } catch (error) {
-        res.status(500).json(error);        
+        res.status(500).json({msg:"Something is wrong try again ",err:error});       
     }
 }
 
 // update Room
 export const updateRoom = async(req,res)=>{
     const {id} = req.params;
+    console.log(req.body.img);
     //
     try {
-        const UpdateRoom = await Room.findOneAndUpdate(id,{
-            $set:req.body
-        })
-        res.status(200).json(UpdateRoom);
+        const UpdateRoom = await Room.findOneAndUpdate(id,{$set:req.body},{new:true});
+        res.status(200).json({msg:"Room is update succesfully",result:UpdateRoom}); 
         
     } catch (error) {
-        res.status(500).json(error);        
+        res.status(500).json({msg:"Something is wrong try again ",err:error});      
     }
 }
 
@@ -73,11 +65,11 @@ export const ARoom = async (req,res)=>{
     console.log(id);
     //
     try {
-      const Room = await Room.findById(id)
-      res.status(200).json(Room);
+      const room = await Room.findById(id)
+      res.status(200).json({msg:"Get a single room",result:room}); 
         
     } catch (error) {
-        res.status(500).json(error);      
+        res.status(500).json({msg:"Something is wrong try again ",err:error});    
         
     }
 }
@@ -87,11 +79,14 @@ export const DeleteRoom = async (req,res)=>{
     console.log(id);
     //
     try {
-      const Room = await Room.findByIdAndDelete(id)
-      res.status(200).json(Room);
+      const room = await Room.findByIdAndDelete(id)
+      if (room) {
+        res.status(200).json({msg:"Room is delete successfully",result:room});      
+      }
+      res.status(200).json({msg:"Not Found",result:room}); 
         
     } catch (error) {
-        res.status(500).json(error);      
+        res.status(500).json({msg:"Something is wrong try again ",err:error});    
         
     }
 }

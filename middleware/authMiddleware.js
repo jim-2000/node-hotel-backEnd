@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { createError } from '../utils/error';
+import { createError } from '../utils/errors/error';
 
 export const verifyToken = (req,res,next)=>{
     //
@@ -17,6 +17,7 @@ export const verifyToken = (req,res,next)=>{
         next();
     });
 }
+
 
 
 

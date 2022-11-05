@@ -1,0 +1,39 @@
+========= hotel =============
+name 
+email
+photos->[]
+city
+address
+distance
+title 
+description
+room [
+    mongoose.Schema.Types.ObjectId
+    ref: Room
+]
+chipestPrice
+feacher -> [{name,desc}]
+rating
+review ->[{uid,description}]
+
+========= Room =============
+title
+description
+roomNumber
+roomType -> 1,2,3
+bed
+wifi
+image->[]
+maxPeople
+roomsize
+feacher
+
+========= Boked =============
+room: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'rooms'
+    },
+start: Date,
+end: Date
+
+

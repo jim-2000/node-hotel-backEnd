@@ -3,8 +3,6 @@ const UserSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      required: true,  
-      unique: false,    
     },
     email: {
       type: String,
@@ -14,33 +12,37 @@ const UserSchema = new mongoose.Schema(
         true,
         "Email should be unique "
       ],
-    },
-    country: {
-      type: String,
-      required: true,
-    },
+    },   
     img: {
       type: String,
-    },
-    city: {
-      type: String,
-      required: true,
-    },
+      default: "https://via.placeholder.com/150",
+    },   
     phone: {
       type: String,
       required: true,
     },
     password: {
-      type: String,
-      required:[
-        true,
-        "Password can't null & min 8 charecter",
-      ],
-      
+      type: String,         
     },
-    isAdmin: {
+    isBlocked: {
       type: Boolean,
       default: false,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,      
+    },
+    otp: {
+      type: Number,
+      null: true,       
+    },
+    otpExpire: {
+      type: Date,
+      null: true,       
+    },
+    reset_link: {
+      type: String,
+      null: true,
     },
   },
   { timestamps: true }

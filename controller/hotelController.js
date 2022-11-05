@@ -4,9 +4,15 @@ import Hotel from '../model/Hotel';
 
 // Get all Hotel list
 const getAllHotel = async (req,res)=>{
+    const {min,max,...others} = req.query;
     try {
-        const hottle = await Hotel.find({});
-        res.status(200).json({msg:"All Hotels",result:hottle});
+        const hottle = await Hotel.find({...others,cheapestPrice:{
+            $gt:min ||1,
+            $lt:max ||999,
+        }}).limit(req.query.limit);
+      
+        res.status(200).json({msg:"All Hotels",result:hottle});              
+        
     } catch (error) {
         res.status(500).json({msg:"something is wrong"});
         
@@ -24,15 +30,34 @@ const CreateHotel = async ( req,res )=>{
         res.status(500).json(error);
      }
 }
+// add new image to hotel
+const AddImage = async (id,images)=>{
+   
+    //
+    try {           
+      const Feacher = await Hotel.updateOne({_id:id},{
+        $push:{
+            photos:images
+        }
+      })
+        return Feacher;
+    } catch (error) {
+        res.status(500).json(error);      
+    }
+}
 
 // update Hotel
 const updateHotel = async(req,res)=>{
     const {id} = req.params;
+    const {photos} = req.body;
     //
     try {
-        const UpdateHotel = await Hotel.findOneAndUpdate(id,{
-            $set:req.body
-        })
+        const UpdateHotel = await Hotel.findOneAndUpdate({_id:id},{
+            $set:req.body,
+        });
+           if(photos){
+            await AddImage(id,photos);
+           }        
         res.status(200).json(UpdateHotel);
         
     } catch (error) {
@@ -111,16 +136,49 @@ const RemoveItemExtraFitures = async (req,res)=>{
                 _id:eId
             }
         }
-      }) 
- 
-
+      })
         res.status(200).json(Feacher);
     } catch (error) {
         res.status(500).json(error);      
     }
 }
 
+// query feachers by city
+export const countByCitys = async (req,res)=>{
+    const cities = req.query.cities.split(',');
+    console.log(cities);
+    //
+    try {
+        const list = await Promise.all(cities.map(async (city)=>{
+            return Hotel.countDocuments({city:city})
+        }))
+        const result = await Promise.all(list);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json(error);      
+    }
+}
+// query feachers by type
+export const countByType = async (req,res)=>{    
+    //
+    try {
+        const hotelCount = await Hotel.countDocuments({type:"hotel"});
+        const apartmentCount = await Hotel.countDocuments({type:"apartment"});
+        const resortCount = await Hotel.countDocuments({type:"resort"});
+        const villaCount = await Hotel.countDocuments({type:"villa"});
+        const cabinCount = await Hotel.countDocuments({type:"cabin"});
 
+        res.status(200).json([[
+            {type:"hotel",count:hotelCount},
+            {type:"apartment",count:apartmentCount},
+            {type:"resort",count: resortCount},
+            {type:"villa",count: villaCount},
+            {type:"cabin",count: cabinCount}            
+        ]]);
+    } catch (error) {
+        res.status(500).json(error);      
+    }
+}
 
 export{
 getAllHotel,

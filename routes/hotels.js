@@ -1,6 +1,6 @@
 import express from 'express'
 import Hotel from '../model/Hotel';
-import {getAllHotel,CreateHotel,updateHotel,AHotel,DeleteHotel, AddExtraFitures,RemoveItemExtraFitures} from '../controller/hotelController'
+import {getAllHotel,CreateHotel,updateHotel,AHotel,DeleteHotel, AddExtraFitures,RemoveItemExtraFitures, countByCitys, countByType} from '../controller/hotelController'
 import { isAdminVerify, verifyUser } from '../middleware/authMiddleware';
 const router = express.Router();
 
@@ -10,15 +10,19 @@ const router = express.Router();
 
 
 //  CREATE
-router.route("/").post(verifyUser,CreateHotel)
+router.route("/").post(CreateHotel)
 //  UPDATE
 router.route("/:id").put(verifyUser,updateHotel)
 //  DELETE
 router.route("/:id").delete(verifyUser,DeleteHotel)
 //  GET
-router.route("/:id").get(AHotel)
+router.route("/find/:id").get(AHotel)
 //  GET ALL
 router.route("/").get(getAllHotel)
+//  count by citys
+router.route("/counByCity").get(countByCitys)
+//  count by type
+router.route("/countByType").get(countByType)
 
 
 

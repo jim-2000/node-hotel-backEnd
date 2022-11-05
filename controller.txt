@@ -1,0 +1,102 @@
+<<<<<<<<<<<<< -user- >>>>>>>>>>>>>>>>
+ ===========*  create user
+              1. unique email
+              2. validation
+              3. token
+============* singup user
+              1. validation
+              2. token
+* delete account
+* update account
+* read a account
+
+
+<<<<<<<<<<<<< -employe- >>>>>>>>>>>>>>>>
+
+ ===========*  signup employe
+              1. unique phone
+              2. validation
+              3. token
+============* singin employe
+              1. validation
+              2. token
+* attendence
+* resigne employe
+* update employe
+* read  employe
+* report employe
+* request for loan 
+* request for vacation
+* block user
+* unblock user
+* add Room
+* Unbooked Room
+* delete Room
+* update Room
+*
+
+
+<<<<<<<<<<<<< -Admin- >>>>>>>>>>>>>>>>
+    -> change password
+    -> update Hotel Information [another db]
+    -> 
+    ===========*  add employe*===========
+                1. firee employe
+                2. update employe
+                3. employe workhistory // chek attendence
+                4. approve for loan
+                5. approve for vacation
+                6. emergency meeting
+                7. 
+    ============* User *=============
+                1. add
+                2. remove              
+                * block user
+                * unblock user 
+
+
+<<<<<<<<<<<<<<<<<< -Hotel- >>>>>>>>>>>>>>>>>>>>>
+-> name
+-> title
+-> subtitle
+-> location
+-> lat , long
+-> min price
+-> max price
+-> slide image [:3]
+-> phone
+-> service time 
+-> extra feacher [{icon, title, subtitle},{}]
+
+/
+/
+/
+
+<<<<<<<<<<<<<<<<<< -Room- >>>>>>>>>>>>>>>>>>>>>
+-> hotel id
+-> Room no.
+-> title
+-> subtitle
+-> price
+-> is boked 
+-> boked_time
+-> feacher [ {},{}],
+-> comment[{user,details}],
+-> floore
+-> area // sqare feet
+
+/
+/
+/
+
+<<<<<<<<<<<<<<<<<< -Booked- >>>>>>>>>>>>>>>>>>>>>
+-> userId
+-> user name
+-> phone
+-> Room id
+-> checkin
+-> checkout
+-> price
+-> isPaymentDone // 30% need to done
+-> 
+
