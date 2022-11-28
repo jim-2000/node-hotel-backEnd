@@ -9,7 +9,7 @@ export const createError = (res, status,msg)=>{
   });
 }
 
-export const sendErrorDev = (err, res) => {
+export const sendErrorDev = (err, res,) => {
     res.status(err.statusCode).json({
       status: err.status,
       error: err,
@@ -18,10 +18,15 @@ export const sendErrorDev = (err, res) => {
     });
   };
   
-export const sendError = (err, res) => {
-    res.status(err.statusCode).json({
-      status:   505,
+export const sendError = (err, res,statusCode) => {
+    res.status(statusCode).json({ 
       message: err,
+      status: statusCode,
     });
-  };
+};
+
+// send user create error
+export const sendUserCreateError = (res, status,msg)=>{
+ 
+}
   

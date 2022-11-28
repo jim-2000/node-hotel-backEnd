@@ -1,14 +1,16 @@
 import User from "../../model/User";
 import bcryptjs from 'bcryptjs'
+import Joi from "joi";
 import dotenv from 'dotenv'
 import CreateJWT from "../../utils/CreateJWT";
 import SendData, { SendCookieData } from "../../utils/responses/SendData";
 import { validateSignUp } from "../../validations/signupValidation";
-import {  sendError } from "../../utils/errors/error";
+import {  createError, sendError, sendErrorDev, sendUserCreateError } from "../../utils/errors/error";
 import { comparePassword, genPassowrd } from "../../utils/passwordconfig";
 import moment from "moment/moment";
 import SendEmail from "../../config/EmailConfig";
 import {SignUpTemplate} from "../../utils/mail/signupmail.js";
+
 
 // secret key
 dotenv.config();
@@ -23,13 +25,13 @@ const projection = {
 
 // Register User
 const RegisterUser = async (req,res)=>{
-
-    try {        
+  
+     try {        
         const {username,email,img,phone,password} = req.body;  
         // check if user already exist
         const oldUser = await User.findOne({email})
         if (oldUser) {
-           return  sendErrorProd("User alrady EXist",res,400);
+           return  sendError("User already exist",res,302)
         }
         const pass = await genPassowrd(password);
           // generate otp
@@ -39,7 +41,7 @@ const RegisterUser = async (req,res)=>{
             username:username,
             email:email,         
             img:img,          
-            phone:phone || "+880 184368759",
+            phone:phone,
             password:pass,
             otp:Otp,
             otpExpire:OtpExpire                 
@@ -48,11 +50,17 @@ const RegisterUser = async (req,res)=>{
         const result = await User.create(data)     
         const token = await CreateJWT({email: result.email,name: result.username,id:result._id,isVerified:result.isVerified});
         //
-      return  SendCookieData(res,{meassage:"User created successfully Now You Need to verify your account ",user: result,token}, "access_token", token,{
-            httpOnly:true,
-            maxAge: 900000,
-            secure:true            
-        });      
+        return SendData(res,{meassage:"User created successfully",user: result,token},200)
+    //   return  SendCookieData(res,
+    //     {meassage:"User created successfully Now You Need to verify your account ",
+    //     user: {email:result.email,username:result.username,id:result._id,isVerified:result.isVerified},
+    //     token
+    //     },
+    //     "access_token", token,{
+    //         httpOnly:true,
+    //         maxAge: 900000,
+    //         secure:true,               
+    //     });      
     } catch (error) {
         console.log(error);
         res.status(201).json({meassage:error})
@@ -67,12 +75,12 @@ const LOGINuser = async (req, res) => {
     try { 
         const oldUser = await User.findOne({email})
         if (!oldUser) {
-            return res.status(400).json({meassage:"User Not found"})
+            return res.status(404).json({meassage:"User Not found"})
         };
         const isMatch = await comparePassword(password,oldUser.password);
         
         if (!isMatch) {
-            return res.status(504).json({meassage:"password is not correct"})
+            return res.status(401).json({meassage:"password is not correct"})
         };         
         if(oldUser.isBlocked == true){
             return res.status(400).json({meassage:"You are blocked please contact with customer support"})       
@@ -122,6 +130,7 @@ export const otpVerify = async (req, res) => {
 // resend otp
 export const resendOtp = async (req, res) => {
     const {email} = req.body;
+    console.log(email);
     try {
         const user = await User.findOne({email});
         if (!user) {
@@ -144,6 +153,60 @@ export const resendOtp = async (req, res) => {
     }
 };
 
+// forgot password
+export const forgotPassword = async (req, res) => {
+    const {email} = req.body;
+    try {
+        const user = await User.findOne({email});
+       
+        if (!user) {
+            return res.status(404).json({meassage:"User Not found"})
+        }
+        const Otp = Math.floor(100000 + Math.random() * 900000);
+        const OtpExpire = moment().add(10, "minutes");
+        user.otp = Otp;
+        user.otpExpire = OtpExpire;
+        await user.save();
+        await SendEmail(
+            email,
+            `Email verification code: ${Otp}`,
+            SignUpTemplate(Otp, `${email} ${''}`)
+        );
+        return res.status(200).json({meassage:"OTP resend successfully"})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({meassage:error})
+    }
+};
+// reset password
+export const resetPassword = async (req, res) => {
+    const {email,otp,password} = req.body;
+
+     console.log(email,otp,password);
+    try {
+        const user = await User.findOne({email});
+        if (!user) {
+            return res.status(400).json({message:"User Not found"})
+        }
+        if (user.otp == otp) {
+            if (moment().isAfter(user.otpExpire,"seconds")) {
+                return sendError("Otp Expired",res,400);
+            }else{
+                const pass = await genPassowrd(password);
+                user.password = pass;
+                user.otp = null;
+                user.otpExpire = null;
+                await user.save();
+                return SendData(res,{message:"Password reset successfully",user:user})
+            }
+        } else {
+            return sendError("OTP is not correct",res,400);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(501).json({message:error})
+    }
+};
 
 
 export  { 

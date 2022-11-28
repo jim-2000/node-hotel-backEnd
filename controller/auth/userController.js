@@ -33,7 +33,8 @@ const deleteAllUser  = async (req,res)=>{
 const AllUser  = async (req,res)=>{
   try {
     const user = await User.find({isAdmin:false});
-    res.json({meassage:"Users",result:user,totalUser:user.length});
+    // res.json({meassage:"Users",result:user,totalUser:user.length});
+    res.json(user);
   } catch (error) {
     res.status(500).json(error);      
   }

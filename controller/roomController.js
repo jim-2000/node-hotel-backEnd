@@ -1,6 +1,7 @@
 import Hotel from "../model/Hotel";
 import Room from "../model/Room";
-
+import Booking from "../model/boked";
+import {format } from 'date-fns'
 // Get all Room list
 export const getAllRoom = async (req,res)=>{
     try {
@@ -90,3 +91,100 @@ export const DeleteRoom = async (req,res)=>{
         
     }
 }
+
+// chek room avaliblity
+export const checkRoomAvaliblity = async (req,res)=>{
+    const {id} = req.params;
+    const {startDate,endDate} = req.body;
+    console.log(startDate,endDate);
+    //
+    try {
+        const room = await Room.findById(id);
+        const unAvailableDates = room.unAvailableDates;
+        const isAvailable = unAvailableDates.every((date)=>{
+            return (startDate < date.startDate && endDate < date.startDate) || (startDate > date.endDate && endDate > date.endDate);
+        });
+        if (isAvailable) {
+            res.status(200).json({msg:"Room is available",result:room});
+        }else{
+            res.status(200).json({msg:"Room is not available",result:room});
+        }
+    } catch (error) {
+        res.status(500).json({msg:"Something is wrong try again ",err:error});    
+    }
+}
+// book room
+export const bookRoom = async (req,res)=>{
+    const {id} = req.params;
+    const {startDate,endDate} = req.body;
+    //
+    if (startDate && endDate) {          
+    try {
+        const checkIn = format(new Date(startDate), 'yyyy-MM-dd');
+        const checkOut = format(new Date(endDate), 'yyyy-MM-dd');
+        console.log(checkIn,checkOut);
+        const room = await Room.findById(id);
+        const unAvailableDates = room.unAvailableDates;
+        const isAvailable = await Room.findOne().where('unAvailableDates').elemMatch({startDate:{$lte:checkIn},endDate:{$gte:checkOut}}).countDocuments();
+        console.log(isAvailable);
+        // const isAvailable = unAvailableDates.every((date)=>{
+        //     return (checkIn < date.startDate && checkOut < date.startDate) || (checkIn > date.endDate && checkOut > date.endDate);
+        // });
+        if (isAvailable == 0 ) {
+             await room.updateOne(
+                {$push:{unAvailableDates:{startDate:checkIn,endDate:checkOut}}}
+                );
+                const updatedRoom =   await room.save();
+            //     const newBooking = await Booking.create({startDate,endDate,room:id ,bookedBy:'60e1f1b1b1b1b1b1b1b1b1b1'});
+            res.status(200).json({msg:"Room is booked",result: updatedRoom});
+        }else{
+            res.status(400).json({msg:"Room is not available"});
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({msg:"Something is wrong try again ",err:error});    
+    }
+}else{
+    res.status(200).json({msg:"Please provide start and end date"});
+}
+
+}
+// remove booking
+export const removeBooking = async (req,res)=>{
+    const {id} = req.params;
+    const {startDate,endDate} = req.body;
+    //
+    if (startDate && endDate) {          
+    try {
+        const checkIn = format(new Date(startDate), 'yyyy-MM-dd');
+        const checkOut = format(new Date(endDate), 'yyyy-MM-dd');
+        console.log(checkIn,checkOut);
+        const room = await Room.findById(id);
+        const unAvailableDates = room.unAvailableDates;
+        const isAvailable = await Room.findOne().where('unAvailableDates').elemMatch({startDate:checkIn,endDate:checkOut});
+        console.log(isAvailable);
+        // const isAvailable = unAvailableDates.every((date)=>{
+        //     return (checkIn < date.startDate && checkOut < date.startDate) || (checkIn > date.endDate && checkOut > date.endDate);
+        // });
+            if (isAvailable) {
+                await room.updateOne(
+                    {
+                        $pull:{
+                            unAvailableDates:{startDate:checkIn,endDate:checkOut}
+                        }
+                    }
+                );
+                const updatedRoom =     await room.save();
+                //     const newBooking = await Booking.create({startDate,endDate,room:id ,bookedBy:'60e1f1b1b1b1b1b1b1b1b1b1'});
+                res.status(200).json({msg:"Your Booking is canceled",result: updatedRoom});
+            }else{
+                res.status(400).json({msg:"We can't find your booking"});
+            }
+        } catch (error) {
+                console.log(error);
+                res.status(500).json({msg:"Something is wrong try again ",err:error});    
+        }
+        }else{
+            res.status(200).json({msg:"Please provide start and end date"});
+        }
+}    

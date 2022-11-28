@@ -15,13 +15,33 @@ const RoomSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    unAvailableDates: [
+      {
+        startDate: {
+          type: Date,
+          required: true,
+        },
+        endDate: {
+          type: Date,
+          required: true,
+        },
+        bookedBy: {
+          type: mongoose.Schema.Types.ObjectId,
+        }, 
+      }
+    ],
     roomType: {
       type: Number, // 0 for single, 1 for double, 2 for family
+      
     },
     price:{
         type:Number,
       required: true,
 
+    },
+    maxGuests: {
+      type: Number,
+      default: 2,
     },
     img: [String],
     maxPeople: {
@@ -30,10 +50,23 @@ const RoomSchema = new mongoose.Schema(
     },   
     size: {
       type: Number,
+    },    
+    totalBed: {
+      type:Number,      
+      default:1
+
     },
-    
-    Bedroom: {
+    BedroomType: {
       type: String,
+      required: [true, 'Please a Bed Type'],
+      enum: {
+          values: [
+              'Single',
+              'Double',
+              'King',
+          ],
+          message: 'Please select correct category for room'
+      }      
     },  
     wifi:{
       type:Boolean,
