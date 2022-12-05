@@ -1,15 +1,15 @@
 import express from "express"
 import path from 'path'
-import dotenv from "dotenv"
+import dotenv from "dotenv" 
 import DbConnect from "./db/DbConnect.js";
 import cors from 'cors'
 import morgan from "morgan";
 import cookieParser  from 'cookie-parser' 
 import  AppRoute from "./routes/Router.js";
-//
 const app = express()
 dotenv.config();
-const port = 4000 || process.env.PORT
+//
+const port = process.env.PORT || 4000;
 
 // config
 app.use(express.static('public'))
@@ -28,19 +28,14 @@ app.get('/', (req, res)=>{
 
 // app initialization
 const Start = async ()=>{   
-    DbConnect();
+    try {
+        await DbConnect();
     app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+    } catch (error) {
+        console.log(error)
+    }
 }
-// mongoose.connection.on("disconnected",()=>{
-//     console.log("DB disconnectd");
-// })
-
-// mongoose.connection.on("connected",()=>{
-//     console.log("DB re connectd");
-// })
-
-// routes
-app.get('/', (req, res) => res.send('Hello World!'))
+ 
 
 
 // mainfunctions
