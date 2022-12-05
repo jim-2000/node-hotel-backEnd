@@ -1,0 +1,269 @@
+:root {
+  --main-color: #111111;
+  --secondary-color: #fefefe;
+  --accent-color: #e31e3c;
+  --light-color: #858585;
+}
+
+*, 
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: var(--main-color);
+  color: var(--secondary-color);
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Basic Styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  padding: 1rem;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+ 
+
+nav {
+  padding: 1rem;
+}
+
+nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+}
+
+nav li a {
+  text-decoration: none;
+  color: var(--secondary-color);
+  font-size: 1.125rem;
+}
+
+ul svg {
+  width: 25px;
+  fill: var(--accent-color);
+}
+
+nav a:hover {
+  color: var(--accent-color);
+}
+
+/* Section One */
+
+.section-one {
+  margin-top: 5rem;
+}
+
+.section-one img {
+  margin: 3rem 0;
+}
+
+.section-one h1 {
+  font-size: 3.5rem;
+}
+
+.section-one h2 {
+  font-size: 2.5rem;
+}
+
+.section-one p {
+  font-size: 1.125rem;
+}
+
+section::after {
+  content: '';
+  display: block;
+  width: 96.5%;
+  height: 1px;
+  background: var(--light-color);
+  margin: 3rem auto;
+}
+
+/* Clients Section */
+
+.grid-group {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr;
+  gap: 50px;
+}
+
+.clients ul {
+  list-style: none;
+  margin: 1rem 0;
+}
+
+.clients li {
+  margin-bottom: 1.25rem;
+}
+
+.clients p {
+  color: var(--light-color);
+}
+
+.clients li a {
+  text-decoration: none;
+  color: var(--secondary-color);
+  font-size: 1.125rem;
+}
+
+.clients a:hover {
+  color: var(--accent-color);
+}
+
+@media (max-width: 700px) {
+  .grid-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    gap: 50px;
+  }
+  
+  .client-list {
+    margin-left: 1.125rem;
+  }
+}
+
+/* Footer */
+
+footer {
+  margin-bottom: 3rem;
+}
+
+footer h3 {
+  font-size: 2.5rem;
+}
+
+footer h3 span {
+  color: var(--accent-color);
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+footer ul {
+  list-style: none;
+}
+
+.icons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.icons i:hover {
+  color: var(--accent-color);
+  cursor: pointer;
+}
+
+.locations {
+  display: flex;
+  gap: 1rem;
+}
+
+.right {
+  margin-bottom: 1.125rem;
+}
+
+@media (max-width: 600px) {
+  .flex-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .right {
+    margin-left: 1.125rem;
+  }
+}
+
+
+main {
+  width: 60%;
+  height: calc(100vh - 100px);
+}
+main section.home {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+}
+main section.home .home-content {
+  width: 45%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  row-gap: 12px;
+}
+main section.home .home-content h6 {
+  color: #e9dcff;
+  opacity: 0.5;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+}
+main section.home .home-content h1 {
+  color: #ffffff;
+  text-transform: capitalize;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+main section.home .home-content a {
+  margin-top: 15px;
+  text-decoration: none;
+  background-color: #e9dcff;
+  padding: 8px 15px;
+  border-radius: 8px;
+  color: #1e1e1e;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 8px;
+}
+main section.home .home-content a img {
+  width: 14px;
+  transform: translate(0px, 0px);
+  transition: transform 0.4s linear;
+}
+main section.home .home-content a:hover img {
+  transform: translate(0px, 5px);
+}
+main section.home .home-img {
+  width: 45%;
+  height: 100%;
+  background: url("https://rvs-payment-landing-page.vercel.app/Assets/hero-image.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+
+
+
+
