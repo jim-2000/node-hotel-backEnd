@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 /config
+/config/EmailConfig.js
+/config/cloudinaryConfig.js
+/config/stripeConfig.js
 
 # testing
 /coverage

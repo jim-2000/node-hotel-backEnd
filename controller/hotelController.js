@@ -1,6 +1,12 @@
 import mongoose from 'mongoose';
 import Hotel from '../model/Hotel';
 
+const projection = {
+    password: 0,
+    createdAt: 0,
+    updatedAt: 0,
+    __v: 0
+}
 
 // Get all Hotel list
 const getAllHotel = async (req,res)=>{

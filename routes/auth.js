@@ -1,5 +1,5 @@
 import express from 'express'
-import { forgotPassword, LOGINuser, otpVerify, RegisterUser, resendOtp, resetPassword } from '../controller/auth/authController';
+import { changePassword, forgotPassword, LOGINuser, otpVerify, phoneVerify, RegisterUser, resendOtp, resetPassword } from '../controller/auth/authController';
 import { celebrate } from 'celebrate';
 import { validateLogin, validateSignUp } from '../validations/signupValidation';
 const router = express.Router();
@@ -22,7 +22,10 @@ router.route("/otpVerify").post(otpVerify);
 router.route("/forgotPassword").post(forgotPassword);
 // reset password
 router.route("/resetPassword").post(resetPassword);
-
+//
+router.route("/phoneVerify").post(phoneVerify);
+// 
+router.route("/changePassword").post(changePassword);
 
 export default router;
  

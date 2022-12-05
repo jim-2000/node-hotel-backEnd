@@ -5,6 +5,12 @@ import SendData from "../../utils/responses/SendData";
 import { sendError } from "../../utils/errors/error";
 
 
+const projection = {
+  password: 0,
+  createdAt: 0,
+  updatedAt: 0,
+  __v: 0
+}
 
 
 // DELETE A USER
@@ -32,7 +38,7 @@ const deleteAllUser  = async (req,res)=>{
 // get all user 
 const AllUser  = async (req,res)=>{
   try {
-    const user = await User.find({isAdmin:false});
+    const user = await User.find({isAdmin:false},projection);
     // res.json({meassage:"Users",result:user,totalUser:user.length});
     res.json(user);
   } catch (error) {

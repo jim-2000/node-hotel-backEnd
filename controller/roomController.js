@@ -2,6 +2,13 @@ import Hotel from "../model/Hotel";
 import Room from "../model/Room";
 import Booking from "../model/boked";
 import {format } from 'date-fns'
+
+const projection = {
+    password: 0,
+    createdAt: 0,
+    updatedAt: 0,
+    __v: 0
+}
 // Get all Room list
 export const getAllRoom = async (req,res)=>{
     try {

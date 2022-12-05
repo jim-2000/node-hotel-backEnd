@@ -3,10 +3,10 @@ const UserSchema = new mongoose.Schema(
   {
     username: {
       type: String,
+      required: true,
     },
     email: {
       type: String,
-      required: true,
       unique: true,
       required:[
         true,
@@ -40,10 +40,24 @@ const UserSchema = new mongoose.Schema(
       type: Date,
       null: true,       
     },
-    reset_link: {
-      type: String,
-      null: true,
+    phoneVerify:{
+      default:false,
     },
+    country:{
+      type:String,
+      default:"BD",
+    },
+    role : {
+      type : String,        
+      enum: {
+          values: [
+              'user',
+              'admin',
+              'employee',
+          ],
+      },
+      default : "user"  // 1-Manager, 2-employee
+  }
   },
   { timestamps: true }
 );

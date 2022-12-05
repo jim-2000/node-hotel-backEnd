@@ -1,5 +1,5 @@
 const SendData = (res,data,status)=>{
-    res.status(status ? status : 500).json(data);
+    res.status(status ? status : 200).json(data);
 }
 // send cookie data
 export const SendCookieData = (res,data,cookieName,cookieValue,cookieOptions)=>{

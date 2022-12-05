@@ -1,4 +1,12 @@
 import Booking from '../model/boked.js';
+
+const projection = {
+    password: 0,
+    createdAt: 0,
+    updatedAt: 0,
+    __v: 0
+}
+//
 export const getAllBooking = async (req,res)=>{
     try {
         const book = await Booking.find({});
