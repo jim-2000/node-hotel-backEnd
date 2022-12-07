@@ -32,8 +32,8 @@ export const RegisterUser = async (req,res)=>{
         // check if user already exist
         const oldUser = await User.findOne({email})
         if (oldUser) {
-           return  SendData(res,{
-            meassage:"User already exist",
+           return  SendData(res,{            
+            message:"User already exist",
             status:422,
         },422); 
         }
@@ -53,8 +53,8 @@ export const RegisterUser = async (req,res)=>{
         const result = await User.create(data)  
         await SendEmail(
             email,
-            `Email verification code: ${Otp}`,
-            SignUpTemplate(Otp, `${email} ${''}`)
+            `Email verification code: ${Otp.Otp}`,
+            SignUpTemplate(Otp.Otp, `${email} ${''}`)
           );
         const token = await CreateJWT({email: result.email,id:result._id,isVerified:result.isVerified,role:result.role});
         //
@@ -108,9 +108,10 @@ export const LOGINuser = async (req, res) => {
                 SignUpTemplate(Otp, `${email} ${''}`)
               );
             return SendData(res,{
+                user:oldUser,
                 meassage:"You need to verify your account",
-                status:401,
-            },401);
+                status:201,
+            },201);
         }
         // token
         const token = CreateJWT({email:oldUser.email, id:oldUser._id,name:oldUser.username,isVerified:oldUser.isVerified});
@@ -146,7 +147,7 @@ export const otpVerify = async (req, res) => {
                 user.otp = null;
                 user.otpExpire = null;
                 await user.save();
-                return SendData(res,{meassage:"OTP is verified successfully",status:200},200);
+                return SendData(res,{meassage:"OTP is verified successfully",status:200,user:user},200);
             }
         }else{
             return sendError("OTP is not correct",res,501);
@@ -162,7 +163,6 @@ export const otpVerify = async (req, res) => {
 // resend otp
 export const resendOtp = async (req, res) => {
     const {email} = req.body;
-  
     try {
         const user = await User.findOne({email});
         if (!user) {

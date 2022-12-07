@@ -20,7 +20,7 @@ export const sendErrorDev = (err, res,) => {
   
 export const sendError = (err, res,statusCode) => {
     res.status(statusCode).json({ 
-      message: err,
+      meassage: err,
       status: statusCode,
     });
 };
