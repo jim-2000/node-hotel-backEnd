@@ -56,7 +56,7 @@ export const RegisterUser = async (req,res)=>{
             `Email verification code: ${Otp.Otp}`,
             SignUpTemplate(Otp.Otp, `${email} ${''}`)
           );
-        const token = await CreateJWT({email: result.email,id:result._id,isVerified:result.isVerified,role:result.role});
+        const token = CreateJWT({email: result.email,id:result._id,isVerified:result.isVerified,role:result.role});
         //
         return SendData(res,{meassage:"User created successfully Now You Need to verify your account",user: result,status:200,token},200)
          
@@ -69,8 +69,6 @@ export const RegisterUser = async (req,res)=>{
   
 }
 // LOGIN USER
-
-
 export const LOGINuser = async (req, res) => {
     const {email,password} = req.body; 
     try { 

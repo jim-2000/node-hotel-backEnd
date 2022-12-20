@@ -9,6 +9,7 @@ const router = express.Router();
 // register 
 router.route("/register").post([
     celebrate(validateSignUp)
+    
 ],RegisterUser);
 // login 
 router.route("/login").post([

@@ -30,7 +30,7 @@ export const validateSignUp = {
             return errors;
           }),
         img: Joi.string().default("https://via.placeholder.com/150"),
-        phone: Joi.string().required().error(errors => {
+        phone: Joi.string().required().error(errors => {           
             errors.forEach(err => {
               switch (err.type) {
                 case "any.empty":
@@ -59,6 +59,7 @@ export const validateSignUp = {
                   break;
               }
             });
+            console.log(errors);
             return errors;
           }),
         isBlocked: Joi.boolean().default(false),    

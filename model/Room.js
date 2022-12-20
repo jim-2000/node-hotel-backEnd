@@ -6,9 +6,8 @@ const RoomSchema = new mongoose.Schema(
         required:true
     },
     description:{
-        type:String,
+      type:String,
       required: true,
-
     },
     roomNumber: {
       type: Number,
@@ -35,7 +34,7 @@ const RoomSchema = new mongoose.Schema(
       
     },
     price:{
-        type:Number,
+      type:Number,
       required: true,
 
     },
@@ -44,10 +43,7 @@ const RoomSchema = new mongoose.Schema(
       default: 2,
     },
     img: [String],
-    maxPeople: {
-      type: Number,
-      required: true,
-    },   
+      
     size: {
       type: Number,
     },    
@@ -67,11 +63,7 @@ const RoomSchema = new mongoose.Schema(
           ],
           message: 'Please select correct category for room'
       }      
-    },  
-    wifi:{
-      type:Boolean,
-      default:true,
-    } ,
+    },
     roomFeature:[
       {
           name: { type: String, required: true, trim: true},

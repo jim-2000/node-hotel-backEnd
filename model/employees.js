@@ -23,6 +23,10 @@ const Employe = new mongoose.Schema(
         type : String,
         default: ''
     },
+    sallary: {
+        type: Number,
+        required: true
+    },
     email: {
         type: String,
         trim: true,
