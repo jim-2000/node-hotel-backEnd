@@ -38,6 +38,7 @@ const deleteAllUser  = async (req,res)=>{
 // get all user 
 const AllUser  = async (req,res)=>{
   try {
+    // console.log(req.user, req.userId);
     const user = await User.find({isAdmin:false},projection);
     // res.json({meassage:"Users",result:user,totalUser:user.length});
     res.json(user);
@@ -48,7 +49,7 @@ const AllUser  = async (req,res)=>{
 //
 const Admin  = async (req,res)=>{
   try {
-    const user = await User.find({isAdmin:true});
+    const user = await User.find({role:'admin'});
     res.json({meassage:"Users",result:user,totalUser:user.length});
   } catch (error) {
     res.status(500).json(error);      
@@ -68,6 +69,25 @@ const blockUser = async (req,res)=>{
     
   }
 }
+// update a user
+const updateUser = async (req,res)=>{
+  const {id} = req.params;
+  try {
+    User.findByIdAndUpdate(id,req.body, ).then((doc)=>{
+      if (!doc) {
+        return res.status(400).json({meassage:"User Not found"})
+      }
+      return SendData(res,{
+        meassage:"User Update successfully",
+        },200)  
+    })
+  } catch (error) {
+    return sendError(res,{
+        meassage:"Something went wrong",
+        status:502,
+    },502);
+  }
+}
 
 export  {
     AllUser,
@@ -75,4 +95,5 @@ export  {
     deleteAllUser,
     deleteAUser,
     blockUser,
+    updateUser
 }

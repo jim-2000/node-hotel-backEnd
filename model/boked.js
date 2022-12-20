@@ -5,6 +5,17 @@ const bookingSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Room'
     },
+    hotelId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Hotel'
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    userName:{
+        type:String,
+    },
     start: {
         type:Date,
         required:true,        
@@ -14,15 +25,23 @@ const bookingSchema = new mongoose.Schema({
         required:true,   
         message: 'End date must be after start date'
     },
-    bookedBy: {
-        type:String, // user id               
+    phone:{
+        type:String,
     },
+    message:{
+        type:String,
+    },
+    // number of day 
     totalDay: Number,
     totalAmount: Number,
+    referAgent: String,
+
+    // payment site
     paid: {
         type:Boolean,
         default:false        
     },
+    coopone: String,
     paymentId: String,
     paymentType: {
         type: String,

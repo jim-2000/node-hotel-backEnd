@@ -37,8 +37,7 @@ const CreateHotel = async ( req,res )=>{
      }
 }
 // add new image to hotel
-const AddImage = async (id,images)=>{
-   
+const AddImage = async (id,images)=>{   
     //
     try {           
       const Feacher = await Hotel.updateOne({_id:id},{
@@ -56,17 +55,29 @@ const AddImage = async (id,images)=>{
 const updateHotel = async(req,res)=>{
     const {id} = req.params;
     const {photos} = req.body;
+ 
     //
     try {
-        const UpdateHotel = await Hotel.findOneAndUpdate({_id:id},{
-            $set:req.body,
-        });
-           if(photos){
-            await AddImage(id,photos);
-           }        
-        res.status(200).json(UpdateHotel);
+        // const UpdateHotel = await Hotel.findOneAndUpdate({_id:id},{
+        //     $set:req.body,
+        //     $push:{            
+        //         nearby:req.body.nearby,                
+        //     }
+        // });
+        const updateHotel = await Hotel.collection.findAndModify({_id:id},
+            {
+                $push:{
+                    nearby:req.body.nearby,
+
+                }
+            })
+        //    if(photos){
+        //     await AddImage(id,photos);
+        //    }        
+        res.status(200).json(updateHotel);
         
     } catch (error) {
+        console.log(error);
         res.status(500).json(error);        
     }
 }

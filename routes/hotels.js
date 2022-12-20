@@ -1,7 +1,7 @@
 import express from 'express'
 import Hotel from '../model/Hotel';
 import {getAllHotel,CreateHotel,updateHotel,AHotel,DeleteHotel, AddExtraFitures,RemoveItemExtraFitures, countByCitys, countByType} from '../controller/hotelController'
-import { isAdminVerify, verifyUser } from '../middleware/authMiddleware';
+// import { } from '../middleware/authMiddleware';
 const router = express.Router();
 
 /*
@@ -12,9 +12,9 @@ const router = express.Router();
 //  CREATE
 router.route("/").post(CreateHotel)
 //  UPDATE
-router.route("/:id").put(verifyUser,updateHotel)
+router.route("/:id").put(updateHotel) //verifyUser
 //  DELETE
-router.route("/:id").delete(verifyUser,DeleteHotel)
+router.route("/:id").delete(DeleteHotel)
 //  GET
 router.route("/find/:id").get(AHotel)
 //  GET ALL
@@ -32,9 +32,9 @@ router.route("/countByType").get(countByType)
 
 
 // add hotel ====== Extra feacher ====
-router.route('/add/extrafeture/:id').patch(verifyUser, AddExtraFitures);
+router.route('/add/extrafeture/:id').patch(AddExtraFitures);
 // remove item from extra feacher
-router.route('/remove/extrafeture/:id').patch(verifyUser,RemoveItemExtraFitures);
+router.route('/remove/extrafeture/:id').patch(RemoveItemExtraFitures);
 
 
 export default router;

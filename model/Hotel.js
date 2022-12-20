@@ -28,9 +28,13 @@ const HotelSchema = new mongoose.Schema({
     long: {
         type: String,
     },
-    photos: {
-        type: [String],
-    },  
+    photos:[
+        {
+            publicId: {type: String, required: true,},
+            url: { type: String, required: true },
+        },
+    ],
+      
     // hotel room details================
     rooms: {
         type: [
@@ -42,7 +46,6 @@ const HotelSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-
     //  Hotel surroundings================
     nearby: [
         {
@@ -122,9 +125,26 @@ const HotelSchema = new mongoose.Schema({
     //comments
     review:[
         {
+            id:{
+                type: mongoose.Schema.ObjectId, required: true,
+                trim: true, ref: 'User' 
+            },
             name: {
-                 type: mongoose.Schema.ObjectId, required: true,
-                 trim: true, ref: 'User' 
+                 type: String,
+            }, 
+            description: { 
+                type: String, required: true, trim: true
+            }        
+        }
+    ],
+    // web data
+    slider:[
+        {
+            img:{
+                type: String,                
+            },
+            title: {
+                 type: String,
             }, 
             description: { 
                 type: String, required: true, trim: true
