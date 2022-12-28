@@ -2,6 +2,18 @@ import mongoose from "mongoose";
 
 const HotelSchema = new mongoose.Schema({
     // hotel identification=============
+    isActive:{
+        type: Boolean,
+        default: true,
+    },
+    isPrimary:{
+        type: Boolean,
+        default: false
+    },
+    owner:{
+        type:mongoose.Schema.Types.ObjectId, // user id
+        ref:'User',
+    },
     name: {
         type: String,
         required: true,
@@ -12,15 +24,13 @@ const HotelSchema = new mongoose.Schema({
     },
     type: {
         type: String, // 1-hotel, 2-motel, 3-resort, 4-hostel, 5-guesthouse
-        required: true, 
+        default: '1',
     },
     city: {
         type: String,
-        required: true,
     },
     address: {
         type: String,
-        required: true,
     },
     lat: {
         type: String,
@@ -44,85 +54,43 @@ const HotelSchema = new mongoose.Schema({
     },
     cheapestPrice: {
         type: Number,
-        required: true,
+        default: 20, // count in dollars
     },
+
     //  Hotel surroundings================
     nearby: [
         {
             name: {type: String, required: true,},
             distance: { type: String, required: true },
         },
-    ],
-    restaurantsAndCafe: [
-        {
-            resturantType: {
-                type: Number, // 1-restaurant, 2-cafe
-                default: 1,
-            }, // 1-restaurant, 2-cafe/bar
-            name: {type: String, required: true,},
-            distance: { type: String, required: true },
-            description: { type: String, required: true },
-        },
-    ],
-    Beaches:[
-        {
-            name: {type: String, required: true,},
-            distance: { type: String, required: true },
-        },
-    ],
-    closestAirport:[
-        {
-            name: {type: String, required: true,},
-            distance: { type: String, required: true },
-        },
-    ],
-    // hotel  details==============
-    popularfacilities: {
-        type: [String],
-        min: 1,
-    },
-    Services: {
-        type: [String],
-        min: 1,
-    },
+    ],  
+    // hotel  details==============   
     facilities: [
         {
             name: { type: String, required: true, trim: true},
-            description: { type: [String], required: true, trim: true}
+            description: { type: [String], required: true, trim: true},
+            icon:{type: String,}
         }
     ],
     // hotel policies
     checkIn: {
         type: String,
-        required: true,
+        default:'12 AM',
     },
     checkOut: {
         type: String,
-        required: true,
+        default:'12 AM',
+        // required: true,
     },
-    cancellation: {
-        type: String,
-    },
-    payment: {
-        type: String,
-    },
-    childrenAndBed: {
-        type: String,
-    },
-    pets: {
-        type: String,
-    },
-    cashOnly:{
-        type: String,
-    },
-    // faq section
+ 
+   
+    // Other section
     faq: [
         {
             question: { type: String, required: true, trim: true},
             answer: { type: String, required: true, trim: true}
         }
     ],
-    //comments
     review:[
         {
             id:{

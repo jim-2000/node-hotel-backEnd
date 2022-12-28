@@ -8,7 +8,7 @@ const router = express.Router();
 router.route("/").get(isAdminVerify,AllUser) // add token middleware
 // delete all user 
 router.route("/delete/all").get(isAdminVerify,deleteAllUser) // add admin token middleware
-router.route("/delete/:id").get( deleteAUser) // add token middleware
+router.route("/delete/:id").get(deleteAUser) // add token middleware
 // get admin
 router.route("/admin").get(isStuffORAdmin,Admin) // add admin token middleware
 // block user

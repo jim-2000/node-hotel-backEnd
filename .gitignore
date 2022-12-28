@@ -11,6 +11,9 @@
 /config/cloudinaryConfig.js
 /config/stripeConfig.js
 
+/controller/cloudController.js
+
+
 # testing
 /coverage
 
