@@ -3,6 +3,7 @@ import path from 'path'
 import dotenv from "dotenv" 
 import DbConnect from "./db/DbConnect.js";
 import cors from 'cors'
+ 
 import morgan from "morgan";
 import cookieParser  from 'cookie-parser' 
 import  AppRoute from "./routes/Router.js";
@@ -11,7 +12,7 @@ dotenv.config();
 //
 const port = process.env.PORT || 4000;
 
-// config
+// config yarn add body-parser
 app.use(express.static('public'))
 app.use(cookieParser())
 app.use(cors())

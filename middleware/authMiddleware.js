@@ -26,14 +26,6 @@ export const verifyToken = (req,res,next)=>{
         next();
     });
 }
-
- 
-
-
-
-
-
-
 export const isEmployeVerify = (req,res,next)=>{
     verifyToken(req,res,next,()=>{
         if (req.user.role == "admin" || req.user.role == "employe") {
@@ -63,7 +55,7 @@ export const auth = async (req,res,next)=>{
     }
 }
 
-export const isAdminVerify = (req,res,next)=>{
+export const isAdminVerify = async (req,res,next)=>{
     let token;
     const {authorization} = req.headers;
     if(req.headers.authorization) { 
@@ -71,8 +63,10 @@ export const isAdminVerify = (req,res,next)=>{
         try {             
             let decodedData;          
                 decodedData =   VerifyJWT(token)           
-                if (decodedData.role === 'admin') {
-                    console.log(decodedData);
+                const isAdmin = await User.find({_id:decodedData.id,role:'admin'})                                  
+                if (isAdmin) {                 
+                    req.userId = decodedData.id;    
+                    req.user = decodedData;                                       
                     next()                                
                 }else{                
                     sendError("You are not authorized as a admin",res,500)

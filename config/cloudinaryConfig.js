@@ -1,12 +1,13 @@
-import {config} from 'cloudinary'
+import * as Cloudinary from 'cloudinary'
 
-const cloudinaryConfig = (req,res,) => {
-  config({
+  const CloudData= (req,res,) => {
+    Cloudinary.v2.config({
   cloud_name: "the-captaion", 
   api_key: "715335848874361", 
   api_secret: "Tf91_RtpDcfkRbMpira_fFGEOio",
   secure: true,   
-  });
- 
+  }); 
 }
-  module.exports ={cloudinaryConfig}
+
+export default CloudData;
+ 
