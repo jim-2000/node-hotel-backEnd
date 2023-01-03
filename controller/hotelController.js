@@ -14,7 +14,7 @@ const getAllHotel = async (req,res)=>{
     // const {min,max,...others} = req.query;
     try {
         const hotel = await Hotel.find({},projection);    
-        res.status(200).json({msg:"All Hotels",result:hotel});              
+        res.status(200).json(hotel);              
         
     } catch (error) {
         res.status(500).json({msg:"something is wrong"});

@@ -2,6 +2,7 @@ import Hotel from "../model/Hotel";
 import Room from "../model/Room";
 import Booking from "../model/boked";
 import {format } from 'date-fns'
+import upload from "./cloudController";
 
 const projection = {
     password: 0,
@@ -13,7 +14,7 @@ const projection = {
 export const getAllRoom = async (req,res)=>{
     try {
         const rooms = await Room.find({});
-        res.status(200).json({msg:"All Room",result:rooms});
+        res.status(200).json(rooms);
     } catch (error) {
         res.status(500).json({msg:"something is wrong"});
         
@@ -21,19 +22,31 @@ export const getAllRoom = async (req,res)=>{
 }
 
 export const createRoom = async (req,res)=>{
-    const {id} = req.params;
-    console.log(id);
-    const  newRoom = new Room(req.body);
+    const {title,description,roomNumber,roomType,price,maxGuests,img,roomFeature} = req.body;
     try {
-        const savedRoom = await newRoom.save();
-        try {
-            await Hotel.findByIdAndUpdate(id,{$push:{rooms:savedRoom._id}});
-        } catch (error) {
-            res.status(500).json({msg:"Error in updating hotel",err:error});
-        }
-        res.status(200).json({msg:"Roome create successfully",result:savedRoom});
+        let newphotos = [];
 
+        if (img && img.length >0) {
+            const imgs = await upload.MultiImage(img)            
+            const result = await Promise.all([imgs]);
+            newphotos=result[0];
+        }else{
+            newphotos=[];
+        }
+        const data = {
+            title: title,
+            description: description,
+            roomNumber: roomNumber,
+            roomType: roomType,
+            price: price,
+            maxGuests: maxGuests,  
+            img:newphotos,      
+            roomFeature:roomFeature,
+        }
+        const newroom  = await Room.create(data);
+        return res.status(201).json(newroom);
     } catch (error) {
+        console.log(error);
         res.status(500).json({msg:"Error in createing room",err:error});        
     }
 }
@@ -74,8 +87,7 @@ export const ARoom = async (req,res)=>{
     //
     try {
       const room = await Room.findById(id)
-      res.status(200).json({msg:"Get a single room",result:room}); 
-        
+      res.status(200).json(room);         
     } catch (error) {
         res.status(500).json({msg:"Something is wrong try again ",err:error});    
         
@@ -89,12 +101,13 @@ export const DeleteRoom = async (req,res)=>{
     try {
       const room = await Room.findByIdAndDelete(id)
       if (room) {
-        res.status(200).json({msg:"Room is delete successfully",result:room});      
-      }
-      res.status(200).json({msg:"Not Found",result:room}); 
-        
+       return res.status(200).json("Room is delete successfully");      
+      }else{
+          return res.status(200).json( "Not Found" ); 
+      }        
     } catch (error) {
-        res.status(500).json({msg:"Something is wrong try again ",err:error});    
+        console.log(error);
+       return res.status(500).json("Something is wrong try again ");    
         
     }
 }

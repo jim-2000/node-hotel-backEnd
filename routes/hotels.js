@@ -7,7 +7,11 @@ const router = express.Router();
 
 /*
         // ---------HOTE CRUD
-*/
+        */
+       
+//  GET ALL
+router.route("/").get(isAdminVerify,getAllHotel)
+
 
 router.route('/img').patch(uploadSingelImage);
 //  CREATE
@@ -18,8 +22,6 @@ router.route("/update/").patch(isAdminVerify,updateHotel) //verifyUser
 router.route("/:id").delete(DeleteHotel)
 //  GET
 router.route("/myHotel/").get(isAdminVerify,OwnerHotel)
-//  GET ALL
-router.route("/").get(getAllHotel)
 //  count by citys
 router.route("/counByCity").get(countByCitys)
 //  count by type

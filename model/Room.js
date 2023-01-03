@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const RoomSchema = new mongoose.Schema(
-  {   
+  {     
     title:{
         type:String,
         required:true
@@ -12,7 +12,7 @@ const RoomSchema = new mongoose.Schema(
     roomNumber: {
       type: Number,
       required: true,
-      unique: true,
+  
     },
     unAvailableDates: [
       {
@@ -31,43 +31,47 @@ const RoomSchema = new mongoose.Schema(
     ],
     roomType: {
       type: Number, // 0 for single, 1 for double, 2 for family
-      
+      default: 0, //
     },
     price:{
       type:Number,
       required: true,
-
     },
     maxGuests: {
       type: Number,
       default: 2,
     },
-    img: [String],
+    img: [
+      {
+        publicId: {type: String, required: true,},
+        url: { type: String, required: true },
+      }
+    ],
       
     size: {
       type: Number,
+      default: 1200,
     },    
     totalBed: {
       type:Number,      
       default:1
-
     },
     BedroomType: {
       type: String,
-      required: [true, 'Please a Bed Type'],
       enum: {
           values: [
               'Single',
               'Double',
               'King',
           ],
-          message: 'Please select correct category for room'
+          default: 'Single',
       }      
     },
     roomFeature:[
       {
           name: { type: String, required: true, trim: true},
-          description: { type: String, required: true, trim: true}        
+          description: { type: String, required: true, trim: true},    
+          icon: { type: String,trim: true}      
       }
     ],    
   },

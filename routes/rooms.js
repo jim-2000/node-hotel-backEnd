@@ -8,7 +8,7 @@ const router = express.Router();
 // get rooms by hotel id
 router.route("/").get(getAllRoom);
 // create a new room
-router.route("/new/:id").post(createRoom);
+router.route("/create").post(createRoom);
 // update Room
 router.route("/:id").put(updateRoom);
 // get a singel Room
